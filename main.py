@@ -1,31 +1,52 @@
-import time
-import datetime
-import pygame 
+import sys
+from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout
+from PyQt6.QtCore import QTimer, QTime, Qt
+from PyQt6.QtGui import QFont, QFontDatabase
 
-def set_alarm(alarm_time):
-    print(f" alarm set for {alarm_time}")
-    sound_file = "my_music.mp3"
-    is_running = True 
+# self é uma referencia ao proprio objeto(intancia da classe)
 
 
-    while is_running:
-        current_time = datetime.datetime.now().strftime("%H:%M:%S")
-        print(current_time)
-        if current_time == alarm_time:
-            print("wake up")
+class DigitalClock(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.time_label = QLabel(self)
+        self.time = QTimer(self)
+        self.initUI()
 
-            pygame.mixer.init()
-            pygame.mixer.music.load(sound_file)
-            pygame.mixer.music.play()
-    
-            while pygame.mixer.music.get_busy():
-                time.sleep(1)
-            is_running = False
-    
-        time.sleep(1)
+    def initUI(self): 
+        self.setWindowTitle("digital clock")
+        self.setGeometry(600, 400, 300, 100)
+
+        vbox = QVBoxLayout()
+        vbox.addWidget(self.time_label)
+        self.setLayout(vbox)
+
+        self.time_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.time_label.setStyleSheet("font-size: 150px;"
+                                    "color: hsl(111, 100%, 50%);")
+        self.setStyleSheet("background-color: black;")
+
+        font_id = QFontDatabase.addApplicationFont("DS-DIGIT.TTF")
+        font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
+        my_font = QFont(font_family, 150)
+        self.time_label.setFont(my_font)
+        self.time.timeout.connect(self.update_time)
+        self.time.start(1000)
+
+        self.update_time()
+
+    def update_time(self):
+        current_time = QTime.currentTime().toString("hh:mm:ss AP")
+        self.time_label.setText(current_time)
+        
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    clock = DigitalClock()
+    clock.show()
+    sys.exit(app.exec()) 
 
 
 
-alarm = input("enter the alarm time (H:M:S): ")
-set_alarm(alarm)
+
 

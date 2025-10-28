@@ -1,3 +1,11 @@
-A simple Python alarm clock developed for learning purposes.
-This program allows users to set a specific time and plays a sound notification when the time is reached.
-It was built to practice time handling, loops, and basic GUI/audio libraries in Python.
+A simple digital clock GUI built with PyQt6.
+It displays the current system time and updates automatically every second using a QTimer.
+The clock text is centered, styled with a custom font and color, and shown over a black background.
+
+Main features:
+
+Real-time time updates every second
+
+Styled digital display (green on black)
+
+Built using QWidget, QLabel, QVBoxLayout, QTimer, and QTime
